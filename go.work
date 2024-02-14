@@ -1,0 +1,11 @@
+go 1.21.6
+
+use (
+    "core"
+    "modules/accounts"
+    "modules/payments"
+    "modules/uploads"
+    "modules/emails"
+    "modules/vcr"
+    "modules/ws"
+)
