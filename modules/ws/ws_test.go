@@ -9,7 +9,6 @@ import (
 	"corefetch/core/rest"
 
 	"github.com/gorilla/websocket"
-	"github.com/olebedev/emitter"
 )
 
 func TestConnect(t *testing.T) {
@@ -41,11 +40,16 @@ func TestConnect(t *testing.T) {
 
 	wg.Add(1)
 
-	events.On("message", func(e *emitter.Event) {
-		msg := e.Args[0].(*Message)
+	OnMessage(func(msg Message) {
+
 		if msg.Kind != "test" {
 			t.Error("expected kind test")
 		}
+
+		if msg.Source.Context().User() != "1" {
+			t.Error("expected user")
+		}
+
 		wg.Done()
 	})
 

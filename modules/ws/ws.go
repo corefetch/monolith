@@ -10,7 +10,6 @@ import (
 	"corefetch/core/rest"
 
 	"github.com/gorilla/websocket"
-	em "github.com/olebedev/emitter"
 )
 
 const (
@@ -18,6 +17,9 @@ const (
 	pingPeriod     = (pongWait * 9) / 10
 	maxMessageSize = 16384
 )
+
+type Handler func(Message)
+type ConnectionHandler func(*Connection)
 
 type Message struct {
 	Kind   string         `json:"kind"`
@@ -32,14 +34,20 @@ type Connection struct {
 	send chan Message
 }
 
-var events = &em.Emitter{}
+var handlers = make([]Handler, 0)
 
 var conns = make(map[string]*Connection)
 
 var mux sync.Mutex
 
-func Events() *em.Emitter {
-	return events
+var connectHandler ConnectionHandler = func(c *Connection) {}
+
+var closeHandler ConnectionHandler = func(c *Connection) {}
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  16384,
+	WriteBufferSize: 16384,
+	CheckOrigin:     checkOrigin,
 }
 
 func Service() *rest.Service {
@@ -48,10 +56,8 @@ func Service() *rest.Service {
 	return srv
 }
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  16384,
-	WriteBufferSize: 16384,
-	CheckOrigin:     checkOrigin,
+func (c *Connection) Context() *rest.Context {
+	return c.ctx
 }
 
 func (c *Connection) watch() {
@@ -112,10 +118,8 @@ func (c *Connection) readin() {
 
 		message.Source = c
 
-		events.Emit("message", message)
-
-		if message.Kind == "ping" {
-			c.Write(Message{Kind: "pong"})
+		for _, h := range handlers {
+			h(*message)
 		}
 	}
 }
@@ -140,19 +144,29 @@ func connectionHandler(ctx *rest.Context) {
 
 	conn.SetCloseHandler(func(code int, text string) error {
 		delete(conns, ctx.User())
-		events.Emit("disconnect", c, code, text)
+		closeHandler(c)
 		return nil
 	})
 
 	conns[ctx.User()] = c
-
-	events.Emit("connect", c)
-
+	connectHandler(c)
 	c.watch()
 }
 
 func checkOrigin(r *http.Request) bool {
 	return true
+}
+
+func SetOnConnectHandler(h ConnectionHandler) {
+	connectHandler = h
+}
+
+func SetOnCloseHandler(h ConnectionHandler) {
+	closeHandler = h
+}
+
+func OnMessage(h Handler) {
+	handlers = append(handlers, h)
 }
 
 func Broadcast(m Message) {
