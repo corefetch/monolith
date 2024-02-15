@@ -30,7 +30,7 @@ func GetAuthContext(i *Context) (context *AuthContext, err error) {
 }
 
 // Guard a route and authorize for specific scope
-func GuardScope(scope Scope, next IntentHandler) IntentHandler {
+func GuardScope(scope Scope, next RestHandler) RestHandler {
 	return func(i *Context) {
 
 		ctx, err := GetAuthContext(i)
@@ -54,6 +54,6 @@ func GuardScope(scope Scope, next IntentHandler) IntentHandler {
 	}
 }
 
-func GuardAuth(fn IntentHandler) IntentHandler {
+func GuardAuth(fn RestHandler) RestHandler {
 	return GuardScope("auth", fn)
 }

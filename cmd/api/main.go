@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"learnt.io/core"
+	"learnt.io/core/rest"
 	"learnt.io/modules/accounts"
 	"learnt.io/modules/payments"
 	"learnt.io/modules/uploads"
@@ -14,12 +14,12 @@ import (
 
 func main() {
 
-	srv := core.Services()
-	srv.Mount(accounts.Service())
-	srv.Mount(uploads.Service())
-	srv.Mount(payments.Service())
-	srv.Mount(vcr.Service())
-	srv.Mount(ws.Service())
+	srv := rest.Services()
+	srv.Use(accounts.Service())
+	srv.Use(uploads.Service())
+	srv.Use(payments.Service())
+	srv.Use(vcr.Service())
+	srv.Use(ws.Service())
 
 	http.ListenAndServe(os.Getenv("LISTEN"), srv)
 }

@@ -1,10 +1,9 @@
-package core
+package rest
 
 import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"learnt.io/core/rest"
 )
 
 type services struct {
@@ -17,7 +16,7 @@ func Services() *services {
 	}
 }
 
-func (s *services) Mount(srv *rest.Service) {
+func (s *services) Use(srv *Service) {
 	s.mux.Mount("/"+srv.Name, srv)
 }
 

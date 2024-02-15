@@ -8,5 +8,5 @@ import (
 )
 
 func main() {
-	http.ListenAndServe(os.Getenv("LISTEN"), uploads.Router())
+	http.ListenAndServe(os.Getenv("LISTEN"), uploads.Service())
 }

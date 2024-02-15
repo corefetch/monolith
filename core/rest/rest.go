@@ -89,7 +89,7 @@ func (c *Context) Write(v any, statusCode ...int) {
 	c.w.Write(buf.Bytes())
 }
 
-type IntentHandler func(*Context)
+type RestHandler func(c *Context)
 
 type Service struct {
 	http.Handler
@@ -117,44 +117,44 @@ func (s *Service) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	s.mux.ServeHTTP(w, r)
 }
 
-func (s *Service) Connect(pattern string, h IntentHandler) {
+func (s *Service) Connect(pattern string, h RestHandler) {
 	s.mux.Connect(pattern, wrap(h))
 }
 
-func (s *Service) Delete(pattern string, h IntentHandler) {
+func (s *Service) Delete(pattern string, h RestHandler) {
 	s.mux.Delete(pattern, wrap(h))
 }
 
-func (s *Service) Get(pattern string, h IntentHandler) {
+func (s *Service) Get(pattern string, h RestHandler) {
 	s.mux.Get(pattern, wrap(h))
 }
 
-func (s *Service) Head(pattern string, h IntentHandler) {
+func (s *Service) Head(pattern string, h RestHandler) {
 	s.mux.Head(pattern, wrap(h))
 }
 
-func (s *Service) Options(pattern string, h IntentHandler) {
+func (s *Service) Options(pattern string, h RestHandler) {
 	s.mux.Options(pattern, wrap(h))
 }
 
-func (s *Service) Patch(pattern string, h IntentHandler) {
+func (s *Service) Patch(pattern string, h RestHandler) {
 	s.mux.Patch(pattern, wrap(h))
 }
 
-func (s *Service) Post(pattern string, h IntentHandler) {
+func (s *Service) Post(pattern string, h RestHandler) {
 	s.mux.Post(pattern, wrap(h))
 }
 
-func (s *Service) Put(pattern string, h IntentHandler) {
+func (s *Service) Put(pattern string, h RestHandler) {
 	s.mux.Put(pattern, wrap(h))
 }
 
-func (s *Service) Trace(pattern string, h IntentHandler) {
+func (s *Service) Trace(pattern string, h RestHandler) {
 	s.mux.Trace(pattern, wrap(h))
 }
 
 // wrap handler into internal way
-func wrap(h IntentHandler) http.HandlerFunc {
+func wrap(h RestHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		defer func() {

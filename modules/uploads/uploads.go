@@ -13,7 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"learnt.io/core/db"
 	"learnt.io/core/rest"
-	"learnt.io/modules/accounts/store"
 )
 
 type Upload struct {
@@ -34,10 +33,11 @@ func Service() *rest.Service {
 
 func upload(c *rest.Context) {
 
-	account, err := store.GetAccount(c.User())
+	owner, err := primitive.ObjectIDFromHex(c.User())
 
 	if err != nil {
-		panic("account expected")
+		c.Write(err, http.StatusUnauthorized)
+		return
 	}
 
 	if err := c.Request().ParseMultipartForm(32 << 20); err != nil {
@@ -63,7 +63,7 @@ func upload(c *rest.Context) {
 
 	upload := Upload{
 		ID:        primitive.NewObjectID(),
-		Owner:     account.ID,
+		Owner:     owner,
 		Name:      header.Filename,
 		Mime:      http.DetectContentType(data),
 		CreatedAt: time.Now(),
@@ -72,7 +72,7 @@ func upload(c *rest.Context) {
 	filePath := fmt.Sprintf(
 		"%s/%s/%s",
 		os.Getenv("UPLOADS_DIR"),
-		account.ID.Hex(),
+		owner.Hex(),
 		upload.ID.Hex(),
 	)
 
