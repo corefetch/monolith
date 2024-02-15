@@ -2,12 +2,14 @@ package ws
 
 import (
 	"net/http"
+	"sync"
 	"testing"
 	"time"
 
 	"corefetch/core/rest"
 
 	"github.com/gorilla/websocket"
+	"github.com/olebedev/emitter"
 )
 
 func TestConnect(t *testing.T) {
@@ -35,19 +37,22 @@ func TestConnect(t *testing.T) {
 		return
 	}
 
-	if err := conn.WriteJSON(&Message{Kind: "ping"}); err != nil {
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+
+	events.On("message", func(e *emitter.Event) {
+		msg := e.Args[0].(*Message)
+		if msg.Kind != "test" {
+			t.Error("expected kind test")
+		}
+		wg.Done()
+	})
+
+	if err := conn.WriteJSON(&Message{Kind: "test"}); err != nil {
 		t.Error(err)
 		return
 	}
 
-	var message Message
-
-	if err := conn.ReadJSON(&message); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if message.Kind != "pong" {
-		t.Error("expected pong")
-	}
+	wg.Wait()
 }

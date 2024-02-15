@@ -106,8 +106,8 @@ func NewService(name, version string) *Service {
 		mux:     chi.NewMux(),
 	}
 
-	srv.mux.Get("/version", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(version))
+	srv.Get("/version", func(c *Context) {
+		c.ResponseWriter().Write([]byte(version))
 	})
 
 	return srv
