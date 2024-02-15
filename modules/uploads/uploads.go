@@ -21,14 +21,15 @@ type Upload struct {
 	Owner      primitive.ObjectID `json:"owner"`
 	Name       string             `json:"name"`
 	Mime       string             `json:"mime"`
-	CreatedAt  time.Time          `json:"created_at"`
-	LastRender time.Time          `json:"last_render"`
+	CreatedAt  time.Time          `json:"created_at" bson:"created_at"`
+	LastRender time.Time          `json:"last_render" bson:"last_render"`
 }
 
 func Service() *rest.Service {
 	s := rest.NewService("uploads", "0.0.0")
 	s.Post("/", rest.GuardAuth(upload))
 	s.Get("/{id}", rest.GuardAuth(render))
+	s.Delete("/{id}", rest.GuardAuth(remove))
 	return s
 }
 
@@ -160,6 +161,75 @@ func render(c *rest.Context) {
 	c.ResponseWriter().Header().Add("Content-Type", upload.Mime)
 
 	if _, err := c.ResponseWriter().Write(data); err != nil {
+		c.Write(err, http.StatusInternalServerError)
+		return
+	}
+
+	go func() {
+		db.C("uploads").UpdateByID(
+			context.TODO(),
+			upload.ID,
+			bson.M{"$set": bson.M{"last_render": time.Now()}},
+		)
+	}()
+}
+
+func remove(c *rest.Context) {
+
+	owner, err := primitive.ObjectIDFromHex(c.User())
+
+	if err != nil {
+		c.Write(err, http.StatusUnauthorized)
+		return
+	}
+
+	id := c.Param("id")
+
+	if id == "" {
+		c.Status(http.StatusNotFound)
+		return
+	}
+
+	oid, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		c.Write(err, http.StatusBadRequest)
+		return
+	}
+
+	res := db.C("uploads").FindOne(
+		context.TODO(),
+		bson.M{"_id": oid},
+	)
+
+	var upload Upload
+
+	if err := res.Decode(&upload); err != nil {
+		c.Write(err, http.StatusInternalServerError)
+		return
+	}
+
+	path := fmt.Sprintf(
+		"%s/%s/%s",
+		os.Getenv("UPLOADS_DIR"),
+		upload.Owner.Hex(),
+		id,
+	)
+
+	if err := os.Remove(path); err != nil {
+		c.Write(err, http.StatusInternalServerError)
+		return
+	}
+
+	_, err = db.C("uploads").DeleteOne(
+		context.TODO(),
+		bson.M{
+			"_id":   upload.ID,
+			"owner": owner,
+		},
+	)
+
+	if err != nil {
 		c.Write(err, http.StatusInternalServerError)
 		return
 	}

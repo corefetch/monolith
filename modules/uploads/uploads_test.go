@@ -118,5 +118,19 @@ func TestUploadAndRender(t *testing.T) {
 
 	if string(data) != "Hello World" {
 		t.Error("expected render text but:", string(data))
+		return
+	}
+
+	req, err = http.NewRequest("DELETE", "http://localhost:8888/"+upload.ID.Hex(), nil)
+	req.Header.Add("Authorization", "Bearer "+key)
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if res.StatusCode != 200 {
+		t.Error("expected delete")
+		return
 	}
 }
