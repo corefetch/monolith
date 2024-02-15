@@ -7,9 +7,10 @@ import (
 	"sync"
 	"time"
 
+	"corefetch/core/rest"
+
 	"github.com/gorilla/websocket"
 	em "github.com/olebedev/emitter"
-	"learnt.io/core/rest"
 )
 
 const (

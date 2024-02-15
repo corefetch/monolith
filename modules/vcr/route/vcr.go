@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"corefetch/core/rest"
+	"corefetch/modules/vcr/service"
+	"corefetch/modules/vcr/store"
+	"corefetch/modules/ws"
+
 	"github.com/olebedev/emitter"
-	"learnt.io/core/rest"
-	"learnt.io/modules/vcr/service"
-	"learnt.io/modules/vcr/store"
-	"learnt.io/modules/ws"
 )
 
 var rooms map[string]*service.Room = make(map[string]*service.Room)

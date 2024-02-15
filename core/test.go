@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"learnt.io/core/rest"
+	"corefetch/core/rest"
 )
 
 func TestService(s *rest.Service) {

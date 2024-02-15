@@ -1,8 +1,8 @@
 package service
 
 import (
-	"learnt.io/modules/vcr/store"
-	"learnt.io/modules/ws"
+	"corefetch/modules/vcr/store"
+	"corefetch/modules/ws"
 )
 
 type Participant struct {

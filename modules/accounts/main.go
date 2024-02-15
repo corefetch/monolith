@@ -1,8 +1,8 @@
 package accounts
 
 import (
-	"learnt.io/core/rest"
-	"learnt.io/modules/accounts/route"
+	"corefetch/core/rest"
+	"corefetch/modules/accounts/route"
 )
 
 func Service() *rest.Service {

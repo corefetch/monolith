@@ -4,10 +4,11 @@ import (
 	"net/http"
 	"time"
 
+	"corefetch/core"
+	"corefetch/core/rest"
+	"corefetch/modules/accounts/store"
+
 	"golang.org/x/crypto/bcrypt"
-	"learnt.io/core"
-	"learnt.io/core/rest"
-	"learnt.io/modules/accounts/store"
 )
 
 type AuthData struct {

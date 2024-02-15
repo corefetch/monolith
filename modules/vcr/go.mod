@@ -1,3 +1,3 @@
-module learnt.io/modules/vcr
+module corefetch/modules/vcr
 
 go 1.21.6

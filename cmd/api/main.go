@@ -4,12 +4,12 @@ import (
 	"net/http"
 	"os"
 
-	"learnt.io/core/rest"
-	"learnt.io/modules/accounts"
-	"learnt.io/modules/payments"
-	"learnt.io/modules/uploads"
-	"learnt.io/modules/vcr"
-	"learnt.io/modules/ws"
+	"corefetch/core/rest"
+	"corefetch/modules/accounts"
+	"corefetch/modules/payments"
+	"corefetch/modules/uploads"
+	"corefetch/modules/vcr"
+	"corefetch/modules/ws"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module learnt.io/modules/accounts
+module corefetch/modules/accounts
 
 go 1.21.6
 

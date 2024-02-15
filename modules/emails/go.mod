@@ -1,4 +1,4 @@
-module learnt.io/modules/emails
+module corefetch/modules/emails
 
 go 1.21.6
 

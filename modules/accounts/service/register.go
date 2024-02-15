@@ -5,13 +5,14 @@ import (
 	"strings"
 	"time"
 
+	"corefetch/core"
+	"corefetch/modules/accounts/store"
+	"corefetch/modules/emails"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
-	"learnt.io/core"
-	"learnt.io/modules/accounts/store"
-	"learnt.io/modules/emails"
 )
 
 type CreateAcountData struct {

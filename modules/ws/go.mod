@@ -1,4 +1,4 @@
-module learnt.io/modules/ws
+module corefetch/modules/ws
 
 go 1.21.6
 

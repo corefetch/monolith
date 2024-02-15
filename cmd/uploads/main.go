@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"learnt.io/modules/uploads"
+	"corefetch/modules/uploads"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package vcr
 
 import (
-	"learnt.io/core/rest"
-	"learnt.io/modules/vcr/route"
+	"corefetch/core/rest"
+	"corefetch/modules/vcr/route"
 )
 
 func Service() *rest.Service {

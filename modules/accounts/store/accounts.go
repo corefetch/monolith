@@ -6,10 +6,11 @@ import (
 	"strings"
 	"time"
 
+	"corefetch/core"
+	"corefetch/core/db"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"learnt.io/core"
-	"learnt.io/core/db"
 )
 
 type MetaKey string

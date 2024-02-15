@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"net/smtp"
 
-	"learnt.io/core"
+	"corefetch/core"
 )
 
 //go:embed templates/**

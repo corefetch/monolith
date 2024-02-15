@@ -1,6 +1,6 @@
 package route
 
-import "learnt.io/core/rest"
+import "corefetch/core/rest"
 
 func Me(i *rest.Context) {
 

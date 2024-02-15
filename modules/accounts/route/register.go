@@ -3,8 +3,8 @@ package route
 import (
 	"net/http"
 
-	"learnt.io/core/rest"
-	"learnt.io/modules/accounts/service"
+	"corefetch/core/rest"
+	"corefetch/modules/accounts/service"
 )
 
 func Register(c *rest.Context) {

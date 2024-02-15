@@ -4,9 +4,10 @@ import (
 	"context"
 	"time"
 
+	"corefetch/core/db"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"learnt.io/core/db"
 )
 
 type Session struct {

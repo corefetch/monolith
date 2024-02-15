@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"learnt.io/core"
-	"learnt.io/core/rest"
-	"learnt.io/modules/accounts/service"
+	"corefetch/core"
+	"corefetch/core/rest"
+	"corefetch/modules/accounts/service"
 )
 
 func TestAuth(t *testing.T) {

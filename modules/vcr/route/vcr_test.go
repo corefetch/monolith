@@ -8,12 +8,13 @@ import (
 	"testing"
 	"time"
 
+	"corefetch/core"
+	"corefetch/core/rest"
+	"corefetch/modules/vcr/store"
+	"corefetch/modules/ws"
+
 	"github.com/gorilla/websocket"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"learnt.io/core"
-	"learnt.io/core/rest"
-	"learnt.io/modules/vcr/store"
-	"learnt.io/modules/ws"
 )
 
 func TestJoin(t *testing.T) {

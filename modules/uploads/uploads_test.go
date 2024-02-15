@@ -9,10 +9,11 @@ import (
 	"testing"
 	"time"
 
+	"corefetch/core"
+	"corefetch/core/rest"
+	"corefetch/modules/accounts/store"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"learnt.io/core"
-	"learnt.io/core/rest"
-	"learnt.io/modules/accounts/store"
 )
 
 func TestUploadAndRender(t *testing.T) {

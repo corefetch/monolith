@@ -1,6 +1,6 @@
 package core
 
-import "learnt.io/core/rest"
+import "corefetch/core/rest"
 
 type M map[string]any
 

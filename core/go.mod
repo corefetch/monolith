@@ -1,4 +1,4 @@
-module learnt.io/core
+module corefetch/core
 
 go 1.21.6
 

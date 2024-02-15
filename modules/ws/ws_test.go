@@ -5,8 +5,9 @@ import (
 	"testing"
 	"time"
 
+	"corefetch/core/rest"
+
 	"github.com/gorilla/websocket"
-	"learnt.io/core/rest"
 )
 
 func TestConnect(t *testing.T) {

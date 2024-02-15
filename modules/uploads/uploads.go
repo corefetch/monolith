@@ -9,10 +9,11 @@ import (
 	"path/filepath"
 	"time"
 
+	"corefetch/core/db"
+	"corefetch/core/rest"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"learnt.io/core/db"
-	"learnt.io/core/rest"
 )
 
 type Upload struct {
@@ -114,19 +115,19 @@ func upload(c *rest.Context) {
 	c.Write(upload, http.StatusCreated)
 }
 
-func render(i *rest.Context) {
+func render(c *rest.Context) {
 
-	id := i.Param("id")
+	id := c.Param("id")
 
 	if id == "" {
-		i.Status(http.StatusNotFound)
+		c.Status(http.StatusNotFound)
 		return
 	}
 
 	oid, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		i.Write(err, http.StatusBadRequest)
+		c.Write(err, http.StatusBadRequest)
 		return
 	}
 
@@ -138,7 +139,7 @@ func render(i *rest.Context) {
 	var upload Upload
 
 	if err := res.Decode(&upload); err != nil {
-		i.Write(err, http.StatusInternalServerError)
+		c.Write(err, http.StatusInternalServerError)
 		return
 	}
 
@@ -152,14 +153,14 @@ func render(i *rest.Context) {
 	data, err := os.ReadFile(path)
 
 	if err != nil {
-		i.Write(err, http.StatusInternalServerError)
+		c.Write(err, http.StatusInternalServerError)
 		return
 	}
 
-	i.ResponseWriter().Header().Add("Content-Type", upload.Mime)
+	c.ResponseWriter().Header().Add("Content-Type", upload.Mime)
 
-	if _, err := i.ResponseWriter().Write(data); err != nil {
-		i.Write(err, http.StatusInternalServerError)
+	if _, err := c.ResponseWriter().Write(data); err != nil {
+		c.Write(err, http.StatusInternalServerError)
 		return
 	}
 }

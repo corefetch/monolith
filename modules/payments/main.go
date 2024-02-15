@@ -1,8 +1,8 @@
 package payments
 
 import (
-	"learnt.io/core"
-	"learnt.io/core/rest"
+	"corefetch/core"
+	"corefetch/core/rest"
 )
 
 func Service() *rest.Service {
