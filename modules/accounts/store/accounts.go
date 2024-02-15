@@ -97,7 +97,11 @@ func (a *Account) Drop() (err error) {
 }
 
 func (user *Account) Save() (err error) {
-	user.ID = primitive.NewObjectID()
+
+	if user.ID.IsZero() {
+		user.ID = primitive.NewObjectID()
+	}
+
 	_, err = db.C("accounts").InsertOne(
 		context.TODO(),
 		user,

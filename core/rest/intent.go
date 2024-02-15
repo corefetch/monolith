@@ -19,6 +19,10 @@ func NewContext(w http.ResponseWriter, r *http.Request) *Context {
 	return &Context{w, r}
 }
 
+func (i *Context) Param(key string) string {
+	return chi.URLParam(i.Request(), key)
+}
+
 func (i *Context) User() string {
 
 	ctx, err := GetAuthContext(i)
@@ -164,6 +168,8 @@ func wrap(h IntentHandler) http.HandlerFunc {
 				}
 
 				slog.Error("rest:", msg)
+
+				w.WriteHeader(http.StatusInternalServerError)
 			}
 		}()
 
