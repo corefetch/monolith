@@ -6,9 +6,9 @@ import (
 )
 
 func Service() *rest.Service {
-	s := rest.NewService("accounts", "0.0.0")
-	s.Post("/", route.Register)
-	s.Post("/auth", route.Auth)
-	s.Get("/me", rest.GuardAuth(route.Me))
-	return s
+	srv := rest.NewService("accounts", "0.0.0")
+	srv.Post("/", route.Register)
+	srv.Post("/auth", route.Auth)
+	srv.Get("/me", rest.GuardAuth(route.Me))
+	return srv
 }

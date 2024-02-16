@@ -1,29 +1,19 @@
 package route
 
-import "corefetch/core/rest"
+import (
+	"corefetch/core/rest"
+	"corefetch/modules/accounts/store"
+	"net/http"
+)
 
-func Me(i *rest.Context) {
+func Me(c *rest.Context) {
 
-	// ids, err := service.DecodeKey(e.Request().Header.Get("Authorization"))
+	user, err := store.GetAccount(c.User())
 
-	// if err != nil {
-	// 	e.Deny(err, http.StatusInternalServerError)
-	// 	return
-	// }
+	if err != nil {
+		c.Write(err, http.StatusNotFound)
+		return
+	}
 
-	// id, err := primitive.ObjectIDFromHex(ids)
-
-	// if err != nil {
-	// 	e.Deny(err, http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// user, err := store.GetAccount(id)
-
-	// if err != nil {
-	// 	e.Deny(err, http.StatusNotFound)
-	// 	return
-	// }
-
-	// e.Accept(user, http.StatusOK)
+	c.Write(user, http.StatusOK)
 }

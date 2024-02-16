@@ -16,19 +16,19 @@ type AuthData struct {
 	Password string `json:"password" validate:"required"`
 }
 
-func Auth(i *rest.Context) {
+func Auth(c *rest.Context) {
 
 	var mid AuthData
 
-	if err := i.Read(&mid); err != nil {
-		i.Status(http.StatusBadRequest)
+	if err := c.Read(&mid); err != nil {
+		c.Status(http.StatusBadRequest)
 		return
 	}
 
 	user, err := store.GetAccountByLogin(mid.Login)
 
 	if err != nil {
-		i.Status(http.StatusUnauthorized)
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 
@@ -38,7 +38,7 @@ func Auth(i *rest.Context) {
 	)
 
 	if err != nil {
-		i.Status(http.StatusUnauthorized)
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 
@@ -49,11 +49,11 @@ func Auth(i *rest.Context) {
 	})
 
 	if err != nil {
-		i.Status(http.StatusUnauthorized)
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 
-	i.Write(core.M{
+	c.Write(core.M{
 		"token": key,
 	})
 }

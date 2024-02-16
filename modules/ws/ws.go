@@ -169,13 +169,21 @@ func OnMessage(h Handler) {
 	handlers = append(handlers, h)
 }
 
+func Forward(m Message) {
+	for _, c := range conns {
+		if m.Source != nil && c.Context().User() != m.Source.Context().User() {
+			c.send <- m
+		}
+	}
+}
+
 func Broadcast(m Message) {
 	for _, c := range conns {
 		c.send <- m
 	}
 }
 
-func GetConnection(user string) (c *Connection, err error) {
+func Get(user string) (c *Connection, err error) {
 
 	c, connected := conns[user]
 
@@ -184,4 +192,11 @@ func GetConnection(user string) (c *Connection, err error) {
 	}
 
 	return c, nil
+}
+
+func Connections() (items []*Connection) {
+	for _, c := range conns {
+		items = append(items, c)
+	}
+	return items
 }

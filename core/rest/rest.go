@@ -70,6 +70,11 @@ func (c *Context) Write(v any, statusCode ...int) {
 		c.w.WriteHeader(statusCode[0])
 	}
 
+	if str, isStr := v.(string); isStr {
+		c.w.Write([]byte(str))
+		return
+	}
+
 	if err, isErr := v.(error); isErr {
 		c.w.Write([]byte(err.Error()))
 		return
@@ -153,7 +158,6 @@ func (s *Service) Trace(pattern string, h RestHandler) {
 	s.mux.Trace(pattern, wrap(h))
 }
 
-// wrap handler into internal way
 func wrap(h RestHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -173,11 +177,9 @@ func wrap(h RestHandler) http.HandlerFunc {
 			}
 		}()
 
-		intent := &Context{
+		h(&Context{
 			w: w,
 			r: r,
-		}
-
-		h(intent)
+		})
 	}
 }
