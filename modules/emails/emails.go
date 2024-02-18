@@ -30,14 +30,6 @@ type SendingJob struct {
 	To Recipient
 }
 
-func AfterRegisterStudent(to Recipient, params TemplateParams) (err error) {
-	return Send("Registration Complete", to, RegisterStudent, params)
-}
-
-func AfterRegisterTutor(to Recipient, params TemplateParams) (err error) {
-	return Send("Registration Complete", to, RegisterStudent, params)
-}
-
 func Send(subject string, to Recipient, templateKey TemplateKey, params TemplateParams) (err error) {
 
 	data, err := templates.ReadFile("templates/" + string(templateKey))

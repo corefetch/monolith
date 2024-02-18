@@ -14,12 +14,12 @@ type ContextKey string
 var UserKey ContextKey = "user"
 
 // Get authorization context
-func GetAuthContext(i *Context) (context *AuthContext, err error) {
+func GetAuthContext(c *Context) (context *AuthContext, err error) {
 
-	var key = i.Query("access_token")
+	var key = c.Query("access_token")
 
 	if key == "" {
-		key = i.Header("Authorization")
+		key = c.Header("Authorization")
 		if strings.IndexAny(key, "Bearer ") == 0 {
 			afterBearer, _ := strings.CutPrefix(key, "Bearer ")
 			key = afterBearer
@@ -31,26 +31,26 @@ func GetAuthContext(i *Context) (context *AuthContext, err error) {
 
 // Guard a route and authorize for specific scope
 func GuardScope(scope Scope, next RestHandler) RestHandler {
-	return func(i *Context) {
+	return func(c *Context) {
 
-		ctx, err := GetAuthContext(i)
+		ctx, err := GetAuthContext(c)
 
 		if err != nil {
-			i.Status(http.StatusUnauthorized)
+			c.Status(http.StatusUnauthorized)
 			return
 		}
 
 		if ctx.Expire.Before(time.Now()) {
-			i.Status(http.StatusUnauthorized)
+			c.Status(http.StatusUnauthorized)
 			return
 		}
 
 		if ctx.Scope != scope {
-			i.Status(http.StatusUnauthorized)
+			c.Status(http.StatusUnauthorized)
 			return
 		}
 
-		next(i)
+		next(c)
 	}
 }
 

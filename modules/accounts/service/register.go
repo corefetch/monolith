@@ -2,12 +2,10 @@ package service
 
 import (
 	"regexp"
-	"strings"
 	"time"
 
 	"corefetch/core"
 	"corefetch/modules/accounts/store"
-	"corefetch/modules/emails"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/pkg/errors"
@@ -72,18 +70,6 @@ func Register(create CreateAcountData) (account *store.Account, err error) {
 
 	if err != nil {
 		return nil, err
-	}
-
-	// Send email after register
-	switch account.Role {
-	case core.RoleStudent:
-		emails.AfterRegisterStudent(account, emails.TemplateParams{
-			"NAME": strings.Join(account.Profile.Names, " "),
-		})
-	case core.RoleTutor:
-		emails.AfterRegisterTutor(account, emails.TemplateParams{
-			"NAME": strings.Join(account.Profile.Names, " "),
-		})
 	}
 
 	return

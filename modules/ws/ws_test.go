@@ -1,11 +1,11 @@
 package ws
 
 import (
-	"net/http"
 	"sync"
 	"testing"
 	"time"
 
+	"corefetch/core"
 	"corefetch/core/rest"
 
 	"github.com/gorilla/websocket"
@@ -13,7 +13,7 @@ import (
 
 func TestConnect(t *testing.T) {
 
-	go http.ListenAndServe(":5678", Service())
+	core.TestService(Service())
 
 	key, err := rest.CreateKey(rest.AuthContext{
 		User:   "1",
@@ -27,7 +27,7 @@ func TestConnect(t *testing.T) {
 	}
 
 	conn, _, err := websocket.DefaultDialer.Dial(
-		"ws://localhost:5678/?access_token="+key,
+		"ws://localhost:8888/?access_token="+key,
 		nil,
 	)
 
