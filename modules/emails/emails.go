@@ -3,8 +3,10 @@ package emails
 import (
 	"bytes"
 	"embed"
+	"fmt"
 	"html/template"
 	"net/smtp"
+	"os"
 
 	"corefetch/core"
 )
@@ -54,14 +56,14 @@ func Send(subject string, to Recipient, templateKey TemplateKey, params Template
 	}
 
 	return smtp.SendMail(
-		"smtp-relay.brevo.com:587",
+		fmt.Sprintf("%s:%s", os.Getenv("SMTP_HOST"), os.Getenv("SMTP_PORT")),
 		smtp.PlainAuth(
 			"",
-			"cosmin.albulescu@gmail.com",
-			"5IHpz6rBwn0ZYqGF",
-			"smtp-relay.brevo.com",
+			os.Getenv("SMTP_USER"),
+			os.Getenv("SMTP_PASS"),
+			os.Getenv("SMTP_HOST"),
 		),
-		"cosmin.albulescu@gmail.com",
+		os.Getenv("SMTP_USER"),
 		[]string{to.RecipientEmail()},
 		job.Bytes(),
 	)

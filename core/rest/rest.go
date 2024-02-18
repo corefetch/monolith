@@ -102,7 +102,6 @@ func (c *Context) Write(v any, statusCode ...int) {
 type RestHandler func(c *Context)
 
 type Service struct {
-	http.Handler
 	Name    string
 	Version string
 	mux     *chi.Mux
