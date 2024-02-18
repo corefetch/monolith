@@ -70,6 +70,11 @@ func (c *Context) Write(v any, statusCode ...int) {
 		c.w.WriteHeader(statusCode[0])
 	}
 
+	if data, isByteArray := v.([]byte); isByteArray {
+		c.w.Write(data)
+		return
+	}
+
 	if str, isStr := v.(string); isStr {
 		c.w.Write([]byte(str))
 		return
